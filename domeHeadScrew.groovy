@@ -3,6 +3,7 @@ CSG generate(){
 	String type= "domeHeadScrew"
 	if(args==null)
 		args=["Imp8"]
+	LengthParameter boltLength		= new LengthParameter("Bolt Length",10,[180,10])
 	// The variable that stores the current size of this vitamin
 	StringParameter size = new StringParameter(	type+" Default",args.get(0),Vitamins.listVitaminSizes(type))
 	HashMap<String,Object> measurments = Vitamins.getConfiguration( type,size.getStrValue())
@@ -25,8 +26,13 @@ CSG generate(){
 	println "Measurment massCentroidZValue =  "+massCentroidZValue
 	println "Measurment massKgValue =  "+massKgValue
 	println "Measurment boltDiameterValue =  "+boltDiameterValue
+	Parabola.coneByHeight(10, 20)
 	// Stub of a CAD object
-	CSG part = new Cube().toCSG()
+	CSG part = Parabola.coneByHeight(headDiameterValue/2, headHeightValue)
+				.rotx(90)
+				.toZMin()
+				.union(new Cylinder(boltDiameterValue/2,boltLength.getMM()).toCSG().toZMax())
+				
 	return part
 		.setParameter(size)
 		.setRegenerate({generate()})
