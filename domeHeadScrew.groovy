@@ -35,6 +35,7 @@ CSG generate(){
 				
 	return part
 		.setParameter(size)
+		.setParameter(boltLength)
 		.setRegenerate({generate()})
 }
 return generate() 
